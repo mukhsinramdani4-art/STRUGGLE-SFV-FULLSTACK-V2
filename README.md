@@ -1,4 +1,4 @@
-# REVISI V2 — Akun Pelanggan, Checkout, Ongkir, Pembayaran, Google Maps
+# SFV V2 — Akun Pelanggan, Checkout, Ongkir, Pembayaran, Google Maps
 
 ## Menjalankan
 ```
