@@ -1,0 +1,1172 @@
+{
+  "PRODUCTS": [
+    {
+      "id": 1,
+      "name": "Zenthral Jersey - Purple",
+      "price": 249000,
+      "originalPrice": 299000,
+      "category": "kaos",
+      "material": "Performance Mesh",
+      "description": "Official SFV × Zenthral jersey. All-over geometric print, moisture-wicking fabric, embroidered SFV logo and Zenthral branding. Available in Short and Long sleeve. Built for the pitch and the street.",
+      "images": [
+        "assets/images/products/zenthal-ss-purple.jpg",
+        "assets/images/products/zenthal-ls-purple.jpg",
+        "assets/images/products/zenthal-detail1.jpg",
+        "assets/images/products/zenthal-detail2.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Purple",
+          "hex": "#5b2d8e"
+        }
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short",
+        "Long"
+      ],
+      "sleevePrices": {
+        "Short": 249000,
+        "Long": 279000
+      },
+      "badge": "New",
+      "stock": 78,
+      "isNew": true,
+      "isBestSeller": true,
+      "isDeal": true,
+      "collection": "zenthal"
+    },
+    {
+      "id": 2,
+      "name": "Zenthral Jersey - Black",
+      "price": 249000,
+      "originalPrice": 299000,
+      "category": "kaos",
+      "material": "Performance Mesh",
+      "description": "Black edition of the SFV × Zenthral jersey. Dark geometric mesh with white branding. Clean, versatile, street-ready. Choose Short or Long sleeve.",
+      "images": [
+        "assets/images/products/zenthal-ss-black.jpg",
+        "assets/images/products/zenthal-ls-black.jpg",
+        "assets/images/products/zenthal-detail1.jpg",
+        "assets/images/products/zenthal-detail2.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        }
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short",
+        "Long"
+      ],
+      "sleevePrices": {
+        "Short": 249000,
+        "Long": 279000
+      },
+      "badge": "Best Seller",
+      "stock": 74,
+      "isNew": false,
+      "isBestSeller": true,
+      "isDeal": true,
+      "collection": "zenthal"
+    },
+    {
+      "id": 5,
+      "name": "SFV Signature Tee - Black",
+      "price": 189000,
+      "originalPrice": 229000,
+      "category": "kaos",
+      "material": "Premium Cotton",
+      "description": "Official Struggle For Victory signature tee. Soft-hand feel, boxy fit, and bold SFV graphic that represents the brand spirit.",
+      "images": [
+        "assets/images/products/sfv-tee-1.jpg",
+        "assets/images/products/sfv-tee-2.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        },
+        {
+          "name": "White",
+          "hex": "#f5f5f5"
+        }
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short"
+      ],
+      "badge": "New",
+      "stock": 48,
+      "isNew": true,
+      "isBestSeller": true,
+      "isDeal": true,
+      "collection": "studio-essentials"
+    },
+    {
+      "id": 6,
+      "name": "SFV Oversized Hoodie",
+      "price": 349000,
+      "originalPrice": 399000,
+      "category": "outer",
+      "material": "Heavyweight Fleece",
+      "description": "Premium oversized hoodie from Struggle For Victory. Thick fleece interior, kangaroo pocket, and embroidered SFV logo.",
+      "images": [
+        "assets/images/products/sfv-hoodie-1.jpg",
+        "assets/images/products/hoodie.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        },
+        {
+          "name": "Charcoal",
+          "hex": "#3d3d3d"
+        }
+      ],
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "badge": "Best Seller",
+      "stock": 32,
+      "isNew": false,
+      "isBestSeller": true,
+      "isDeal": true,
+      "collection": "studio-essentials"
+    },
+    {
+      "id": 8,
+      "name": "Seringai - Serigala Militia Tee",
+      "price": 179000,
+      "originalPrice": 219000,
+      "category": "kaos",
+      "material": "100% Cotton",
+      "description": "Official-inspired Seringai graphic tee. Serigala Militia artwork with dual wolves and floral motif. Heavy cotton, classic fit.",
+      "images": [
+        "assets/images/products/seringai-tee-2.jpg",
+        "assets/images/products/seringai-tee.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Black",
+          "hex": "#111111"
+        }
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short"
+      ],
+      "badge": "Hot",
+      "stock": 28,
+      "isNew": true,
+      "isBestSeller": true,
+      "isDeal": true,
+      "collection": "graphic-tees"
+    },
+    {
+      "id": 9,
+      "name": "Guns N' Roses - Use Your Illusion Tee",
+      "price": 189000,
+      "originalPrice": 229000,
+      "category": "kaos",
+      "material": "100% Cotton",
+      "description": "Classic Use Your Illusion artwork on premium black tee. Bold color-blocked design, soft hand feel.",
+      "images": [
+        "assets/images/products/guns-roses-tee-2.jpg",
+        "assets/images/products/guns-roses-tee.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Black",
+          "hex": "#111111"
+        }
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short"
+      ],
+      "badge": "Hot",
+      "stock": 30,
+      "isNew": false,
+      "isBestSeller": true,
+      "isDeal": true,
+      "collection": "graphic-tees"
+    },
+    {
+      "id": 10,
+      "name": "Black Sabbath - Born in a Graveyard Tee",
+      "price": 189000,
+      "originalPrice": 229000,
+      "category": "kaos",
+      "material": "100% Cotton",
+      "description": "Heavy metal classic. Born in a Graveyard / Adopted by Sin graphic. Premium print on black cotton.",
+      "images": [
+        "assets/images/products/black-sabbath-tee-2.jpg",
+        "assets/images/products/black-sabbath-tee.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Black",
+          "hex": "#111111"
+        }
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short"
+      ],
+      "badge": null,
+      "stock": 25,
+      "isNew": false,
+      "isBestSeller": true,
+      "isDeal": false,
+      "collection": "graphic-tees"
+    },
+    {
+      "id": 11,
+      "name": "blink-182 Classic Group Tee",
+      "price": 169000,
+      "originalPrice": 199000,
+      "category": "kaos",
+      "material": "100% Cotton",
+      "description": "Iconic blink-182 group photo tee on white. Soft cotton, classic crew neck, perfect everyday pop-punk piece.",
+      "images": [
+        "assets/images/products/blink182-tee.jpg"
+      ],
+      "colors": [
+        {
+          "name": "White",
+          "hex": "#f5f5f5"
+        }
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short"
+      ],
+      "badge": "New",
+      "stock": 35,
+      "isNew": true,
+      "isBestSeller": false,
+      "isDeal": true,
+      "collection": "graphic-tees"
+    },
+    {
+      "id": 12,
+      "name": "U Crew Neck T-Shirt (2-Pack)",
+      "price": 199000,
+      "originalPrice": null,
+      "category": "kaos",
+      "material": "Supima Cotton",
+      "description": "Inspired by everyday essentials. Soft Supima cotton crew neck. Clean fit, perfect layering or standalone.",
+      "images": [
+        "assets/images/products/tee-white.jpg",
+        "assets/images/products/tee-black.jpg"
+      ],
+      "colors": [
+        {
+          "name": "White",
+          "hex": "#f5f5f5"
+        },
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        },
+        {
+          "name": "Navy",
+          "hex": "#1e2a44"
+        }
+      ],
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short"
+      ],
+      "badge": "Essential",
+      "stock": 80,
+      "isNew": false,
+      "isBestSeller": true,
+      "isDeal": false,
+      "collection": "minimal-wardrobe"
+    },
+    {
+      "id": 13,
+      "name": "AIRism Cotton Oversized T-Shirt",
+      "price": 229000,
+      "originalPrice": 269000,
+      "category": "kaos",
+      "material": "AIRism Cotton",
+      "description": "Ultra-soft AIRism fabric with cotton exterior. Quick-dry, anti-odor, oversized relaxed fit.",
+      "images": [
+        "assets/images/products/tee-black.jpg",
+        "assets/images/products/tee-white.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        },
+        {
+          "name": "White",
+          "hex": "#f5f5f5"
+        },
+        {
+          "name": "Gray",
+          "hex": "#8a8a8a"
+        }
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short"
+      ],
+      "badge": "New",
+      "stock": 55,
+      "isNew": true,
+      "isBestSeller": true,
+      "isDeal": true,
+      "collection": "minimal-wardrobe"
+    },
+    {
+      "id": 14,
+      "name": "Linen Blend Shirt",
+      "price": 349000,
+      "originalPrice": 399000,
+      "category": "kemeja",
+      "material": "Linen Blend",
+      "description": "Breathable linen-blend button-up. Relaxed collar, slightly oversized, perfect for warm weather.",
+      "images": [
+        "assets/images/products/shirt-linen.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Natural",
+          "hex": "#e8dcc8"
+        },
+        {
+          "name": "White",
+          "hex": "#f8f8f8"
+        },
+        {
+          "name": "Olive",
+          "hex": "#6b705c"
+        }
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "sleeves": [
+        "Short",
+        "Long"
+      ],
+      "badge": "New",
+      "stock": 28,
+      "isNew": true,
+      "isBestSeller": false,
+      "isDeal": true,
+      "collection": "linen-series"
+    },
+    {
+      "id": 15,
+      "name": "Fluid Wide-Leg Tailored Trousers",
+      "price": 479000,
+      "originalPrice": null,
+      "category": "celana_panjang",
+      "material": "Pure Linen",
+      "description": "Effortlessly elegant wide-leg trousers crafted from pure linen. High waist, fluid drape.",
+      "images": [
+        "assets/images/products/trousers.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Natural",
+          "hex": "#e8dcc8"
+        },
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        }
+      ],
+      "sizes": [
+        "28",
+        "30",
+        "32",
+        "34",
+        "36"
+      ],
+      "badge": null,
+      "stock": 22,
+      "isNew": false,
+      "isBestSeller": true,
+      "isDeal": false,
+      "collection": "linen-series"
+    },
+    {
+      "id": 16,
+      "name": "Linen Drawstring Shorts",
+      "price": 289000,
+      "originalPrice": null,
+      "category": "celana_pendek",
+      "material": "Pure Linen",
+      "description": "Breathable linen shorts with soft drawstring waist. Lightweight and ideal for warm weather.",
+      "images": [
+        "assets/images/products/trousers.jpg",
+        "assets/images/products/shirt-linen.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Natural",
+          "hex": "#e8dcc8"
+        },
+        {
+          "name": "Olive",
+          "hex": "#6b705c"
+        }
+      ],
+      "sizes": [
+        "28",
+        "30",
+        "32",
+        "34",
+        "36"
+      ],
+      "badge": null,
+      "stock": 26,
+      "isNew": false,
+      "isBestSeller": true,
+      "isDeal": false,
+      "collection": "linen-series"
+    },
+    {
+      "id": 17,
+      "name": "Soft Knit Crew Sweater",
+      "price": 399000,
+      "originalPrice": 459000,
+      "category": "outer",
+      "material": "Fine Gauge Knit",
+      "description": "Ultra-soft fine-gauge knit crew. Clean minimal design, perfect for layering.",
+      "images": [
+        "assets/images/products/knitwear.jpg",
+        "assets/images/products/sweater.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        },
+        {
+          "name": "Cream",
+          "hex": "#f5f0e6"
+        },
+        {
+          "name": "Navy",
+          "hex": "#1e2a44"
+        }
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "badge": "New",
+      "stock": 30,
+      "isNew": true,
+      "isBestSeller": false,
+      "isDeal": true,
+      "collection": "knitwear"
+    },
+    {
+      "id": 18,
+      "name": "Structured Blazer",
+      "price": 699000,
+      "originalPrice": 849000,
+      "category": "outer",
+      "material": "Wool Blend",
+      "description": "Modern structured blazer with soft shoulder. Versatile for work or elevated casual looks.",
+      "images": [
+        "assets/images/products/blazer.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Charcoal",
+          "hex": "#3d3d3d"
+        },
+        {
+          "name": "Navy",
+          "hex": "#1e2a44"
+        }
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "badge": "Premium",
+      "stock": 16,
+      "isNew": false,
+      "isBestSeller": false,
+      "isDeal": true,
+      "collection": "tailoring"
+    },
+    {
+      "id": 19,
+      "name": "Performance Polo",
+      "price": 259000,
+      "originalPrice": null,
+      "category": "kaos",
+      "material": "Piqué Cotton",
+      "description": "Classic polo updated with moisture-wicking piqué. Clean collar, modern slim-relaxed fit.",
+      "images": [
+        "assets/images/products/polo.jpg"
+      ],
+      "colors": [
+        {
+          "name": "White",
+          "hex": "#f5f5f5"
+        },
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        },
+        {
+          "name": "Navy",
+          "hex": "#1e2a44"
+        }
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short"
+      ],
+      "badge": null,
+      "stock": 44,
+      "isNew": false,
+      "isBestSeller": true,
+      "isDeal": false,
+      "collection": "minimal-wardrobe"
+    },
+    {
+      "id": 20,
+      "name": "Lightweight Outerwear Jacket",
+      "price": 549000,
+      "originalPrice": 649000,
+      "category": "outer",
+      "material": "Nylon Blend",
+      "description": "Lightweight packable jacket. Water-resistant shell, minimal branding, perfect transitional piece.",
+      "images": [
+        "assets/images/products/outerwear.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        },
+        {
+          "name": "Olive",
+          "hex": "#5c6b4a"
+        }
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "badge": "New",
+      "stock": 20,
+      "isNew": true,
+      "isBestSeller": false,
+      "isDeal": true,
+      "collection": "studio-essentials"
+    },
+    {
+      "id": 21,
+      "name": "AIRism Cotton Oversized Crew Neck T-Shirt",
+      "price": 249000,
+      "originalPrice": null,
+      "category": "kaos",
+      "material": "AIRism Cotton · Recycled Materials",
+      "description": "Ultra-soft AIRism Cotton oversized crew neck. Relaxed silhouette, quick-dry, anti-odor. Pilih Short atau Long sleeve — satu item, dua opsi lengan.",
+      "images": [
+        "assets/images/products/tee-white.jpg",
+        "assets/images/products/tee-black.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Beige",
+          "hex": "#d4c5b0"
+        },
+        {
+          "name": "Light Green",
+          "hex": "#c5d4b8"
+        },
+        {
+          "name": "White",
+          "hex": "#f5f5f5"
+        },
+        {
+          "name": "Navy",
+          "hex": "#1e2a44"
+        },
+        {
+          "name": "Gray",
+          "hex": "#8a8a8a"
+        },
+        {
+          "name": "Olive",
+          "hex": "#6b705c"
+        },
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        },
+        {
+          "name": "Blue",
+          "hex": "#2c4a6e"
+        }
+      ],
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short",
+        "Long"
+      ],
+      "sleevePrices": {
+        "Short": 249000,
+        "Long": 279000
+      },
+      "badge": "Bestseller",
+      "stock": 180,
+      "isNew": true,
+      "isBestSeller": true,
+      "isDeal": false,
+      "collection": "minimal-wardrobe"
+    },
+    {
+      "id": 22,
+      "name": "AIRism Cotton Crew Neck T-Shirt",
+      "price": 149000,
+      "originalPrice": 199000,
+      "category": "kaos",
+      "material": "AIRism Cotton · Recycled Materials",
+      "description": "Classic fit AIRism Cotton crew neck. Soft hand-feel, breathable, and durable. Available in Short & Long sleeve for everyday layering.",
+      "images": [
+        "assets/images/products/tee-black.jpg",
+        "assets/images/products/tee-white.jpg"
+      ],
+      "colors": [
+        {
+          "name": "White",
+          "hex": "#f5f5f5"
+        },
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        },
+        {
+          "name": "Navy",
+          "hex": "#1e2a44"
+        },
+        {
+          "name": "Gray",
+          "hex": "#8a8a8a"
+        },
+        {
+          "name": "Beige",
+          "hex": "#d4c5b0"
+        },
+        {
+          "name": "Olive",
+          "hex": "#6b705c"
+        }
+      ],
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short",
+        "Long"
+      ],
+      "sleevePrices": {
+        "Short": 149000,
+        "Long": 179000
+      },
+      "badge": "Sale",
+      "stock": 95,
+      "isNew": false,
+      "isBestSeller": true,
+      "isDeal": true,
+      "collection": "minimal-wardrobe"
+    },
+    {
+      "id": 24,
+      "name": "Supima Cotton Crew Neck T-Shirt (2-Pack)",
+      "price": 199000,
+      "originalPrice": null,
+      "category": "kaos",
+      "material": "Supima Cotton",
+      "description": "Premium Supima cotton 2-pack crew neck. Exceptional softness and durability. Essential basics for any wardrobe.",
+      "images": [
+        "assets/images/products/tee-white.jpg",
+        "assets/images/products/tee-black.jpg"
+      ],
+      "colors": [
+        {
+          "name": "White",
+          "hex": "#f5f5f5"
+        },
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        }
+      ],
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short"
+      ],
+      "badge": "Essential",
+      "stock": 80,
+      "isNew": false,
+      "isBestSeller": true,
+      "isDeal": false,
+      "collection": "minimal-wardrobe"
+    },
+    {
+      "id": 25,
+      "name": "Dry-EX Performance T-Shirt",
+      "price": 179000,
+      "originalPrice": 219000,
+      "category": "kaos",
+      "material": "Dry-EX Mesh",
+      "description": "Quick-dry performance tee with mesh panels. Ideal for training, running, or hot weather. Lightweight and breathable.",
+      "images": [
+        "assets/images/products/polo.jpg",
+        "assets/images/products/tee-black.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        },
+        {
+          "name": "Navy",
+          "hex": "#1e2a44"
+        },
+        {
+          "name": "Gray",
+          "hex": "#8a8a8a"
+        }
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short"
+      ],
+      "badge": null,
+      "stock": 45,
+      "isNew": true,
+      "isBestSeller": false,
+      "isDeal": true,
+      "collection": "studio-essentials"
+    },
+    {
+      "id": 26,
+      "name": "AIRism Cotton Henley Short Sleeve",
+      "price": 199000,
+      "originalPrice": null,
+      "category": "kaos",
+      "material": "AIRism Cotton · Recycled Materials",
+      "description": "Soft AIRism henley with button placket. Relaxed fit, quick-dry. Perfect casual essential inspired by premium basics.",
+      "images": [
+        "assets/images/products/tee-black.jpg",
+        "assets/images/products/tee-white.jpg"
+      ],
+      "colors": [
+        {
+          "name": "Gray",
+          "hex": "#6b6b6b"
+        },
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        },
+        {
+          "name": "White",
+          "hex": "#f5f5f5"
+        },
+        {
+          "name": "Navy",
+          "hex": "#1e2a44"
+        }
+      ],
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short"
+      ],
+      "badge": "New",
+      "stock": 70,
+      "isNew": true,
+      "isBestSeller": false,
+      "isDeal": false,
+      "collection": "minimal-wardrobe"
+    },
+    {
+      "id": 27,
+      "name": "U Soft Touch Crew Neck T-Shirt",
+      "price": 129000,
+      "originalPrice": 159000,
+      "category": "kaos",
+      "material": "Soft Touch Cotton",
+      "description": "Everyday soft-touch crew neck. Lightweight, comfortable, and easy to layer. Core colors for a minimal wardrobe.",
+      "images": [
+        "assets/images/products/tee-white.jpg",
+        "assets/images/products/tee-black.jpg"
+      ],
+      "colors": [
+        {
+          "name": "White",
+          "hex": "#f5f5f5"
+        },
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        },
+        {
+          "name": "Beige",
+          "hex": "#d4c5b0"
+        },
+        {
+          "name": "Light Green",
+          "hex": "#c5d4b8"
+        },
+        {
+          "name": "Navy",
+          "hex": "#1e2a44"
+        }
+      ],
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short",
+        "Long"
+      ],
+      "sleevePrices": {
+        "Short": 129000,
+        "Long": 159000
+      },
+      "badge": "Sale",
+      "stock": 110,
+      "isNew": false,
+      "isBestSeller": true,
+      "isDeal": true,
+      "collection": "minimal-wardrobe"
+    },
+    {
+      "id": 28,
+      "name": "AIRism Cotton Oversized Polo",
+      "price": 269000,
+      "originalPrice": null,
+      "category": "kaos",
+      "material": "AIRism Cotton",
+      "description": "Oversized polo in soft AIRism cotton. Clean collar, relaxed body, modern street-ready silhouette.",
+      "images": [
+        "assets/images/products/polo.jpg"
+      ],
+      "colors": [
+        {
+          "name": "White",
+          "hex": "#f5f5f5"
+        },
+        {
+          "name": "Black",
+          "hex": "#1a1a1a"
+        },
+        {
+          "name": "Navy",
+          "hex": "#1e2a44"
+        },
+        {
+          "name": "Olive",
+          "hex": "#6b705c"
+        }
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "sleeves": [
+        "Short"
+      ],
+      "badge": "New",
+      "stock": 52,
+      "isNew": true,
+      "isBestSeller": false,
+      "isDeal": false,
+      "collection": "minimal-wardrobe"
+    }
+  ],
+  "CATEGORIES": [
+    {
+      "id": "all",
+      "nameKey": "catAll",
+      "icon": "grid_view"
+    },
+    {
+      "id": "kaos",
+      "nameKey": "catKaos",
+      "icon": "checkroom"
+    },
+    {
+      "id": "kemeja",
+      "nameKey": "catKemeja",
+      "icon": "styler"
+    },
+    {
+      "id": "outer",
+      "nameKey": "catOuter",
+      "icon": "dry_cleaning"
+    },
+    {
+      "id": "celana_panjang",
+      "nameKey": "catCelanaPanjang",
+      "icon": "straighten"
+    },
+    {
+      "id": "celana_pendek",
+      "nameKey": "catCelanaPendek",
+      "icon": "content_cut"
+    }
+  ],
+  "COLLECTIONS": [
+    {
+      "id": "zenthal",
+      "name": "Zenthral Collection",
+      "description": "Official SFV × Zenthral performance jerseys.",
+      "image": "assets/images/products/zenthal-ss-purple.jpg"
+    },
+    {
+      "id": "graphic-tees",
+      "name": "Graphic Tees",
+      "description": "Bold prints and cultural graphics.",
+      "image": "assets/images/products/seringai-tee-2.jpg"
+    },
+    {
+      "id": "linen-series",
+      "name": "Linen Series",
+      "description": "Breathable pure linen essentials for warm days.",
+      "image": "assets/images/products/shirt-linen.jpg"
+    },
+    {
+      "id": "studio-essentials",
+      "name": "Studio Essentials",
+      "description": "Core pieces for the modern wardrobe.",
+      "image": "assets/images/products/sfv-hoodie-1.jpg"
+    },
+    {
+      "id": "tailoring",
+      "name": "Tailoring",
+      "description": "Refined cuts and structured silhouettes.",
+      "image": "assets/images/products/blazer.jpg"
+    },
+    {
+      "id": "minimal-wardrobe",
+      "name": "Minimal Wardrobe",
+      "description": "Timeless basics in elevated materials.",
+      "image": "assets/images/products/tee-white.jpg"
+    },
+    {
+      "id": "knitwear",
+      "name": "Knitwear",
+      "description": "Soft knits for layering and comfort.",
+      "image": "assets/images/products/knitwear.jpg"
+    }
+  ],
+  "COUPONS": [
+    {
+      "code": "NEWCLIENT15",
+      "description": "15% off Linen Series",
+      "discountType": "percent",
+      "discountValue": 15,
+      "maxDiscount": 150000,
+      "minPurchase": 300000,
+      "validUntil": "2026-12-31",
+      "usageLimit": 1,
+      "used": 0,
+      "status": "active"
+    },
+    {
+      "code": "STRUGGLE20",
+      "description": "20% off Studio Essentials",
+      "discountType": "percent",
+      "discountValue": 20,
+      "maxDiscount": 200000,
+      "minPurchase": 400000,
+      "validUntil": "2026-10-31",
+      "usageLimit": 1,
+      "used": 0,
+      "status": "active"
+    },
+    {
+      "code": "FREESHIP",
+      "description": "Free shipping on orders over Rp 500.000",
+      "discountType": "shipping",
+      "discountValue": 0,
+      "maxDiscount": 50000,
+      "minPurchase": 500000,
+      "validUntil": "2026-12-31",
+      "usageLimit": 3,
+      "used": 0,
+      "status": "active"
+    },
+    {
+      "code": "ZENTHRAL10",
+      "description": "10% off Zenthral Collection",
+      "discountType": "percent",
+      "discountValue": 10,
+      "maxDiscount": 100000,
+      "minPurchase": 200000,
+      "validUntil": "2026-12-31",
+      "usageLimit": 2,
+      "used": 0,
+      "status": "active"
+    }
+  ],
+  "BANNERS": [
+    {
+      "image": "assets/images/banners/manip1_struggle.png",
+      "titleKey": "banner1Title",
+      "subKey": "banner1Sub",
+      "link": "collections.html"
+    },
+    {
+      "image": "assets/images/banners/manip2_seringal.png",
+      "titleKey": "banner2Title",
+      "subKey": "banner2Sub",
+      "link": "categories.html?cat=kaos"
+    },
+    {
+      "image": "assets/images/banners/manip3_zenithral.png",
+      "titleKey": "banner3Title",
+      "subKey": "banner3Sub",
+      "link": "new-arrivals.html"
+    },
+    {
+      "image": "assets/images/banners/manip4_atlantik.png",
+      "titleKey": "banner4Title",
+      "subKey": "banner4Sub",
+      "link": "deals.html"
+    },
+    {
+      "image": "assets/images/banners/manip5_chemistry.png",
+      "titleKey": "banner5Title",
+      "subKey": "banner5Sub",
+      "link": "collections.html"
+    }
+  ]
+}

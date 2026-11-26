@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wishlist — STRUGGLE / STUDIO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="icon" href="assets/images/logo.png">
+</head>
+<body>
+<div class="app-layout">
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><img src="assets/images/logo.png" alt="STRUGGLE"><div class="sidebar-brand-text"><span class="brand-name">SFV</span><span class="brand-sub">Studio</span></div></div>
+  <nav class="nav-section">
+    <a href="index.html" class="nav-link"><span class="material-symbols-outlined">home</span> Home</a>
+    <a href="categories.html" class="nav-link"><span class="material-symbols-outlined">grid_view</span> Categories</a>
+    <a href="wishlist.html" class="nav-link active"><span class="material-symbols-outlined">favorite</span> Wishlist</a>
+    <a href="my-orders.html" class="nav-link"><span class="material-symbols-outlined">receipt_long</span> My Orders</a>
+  </nav>
+  <div class="sidebar-footer"><div class="user-card"><div class="user-avatar">A</div><div class="user-info"><div class="user-name">Guest</div><div class="user-role">Sign in</div></div></div></div>
+</aside>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="main-content">
+  <header class="header">
+    <div class="header-left"><button class="sidebar-toggle" id="sidebar-toggle"><span class="material-symbols-outlined">menu</span></button>
+    <div class="search-box"><span class="material-symbols-outlined" style="color:var(--text-muted);font-size:20px">search</span><input type="text" id="search-input" placeholder="Search..."></div></div>
+    <div class="header-right">
+      <a href="wishlist.html" class="header-btn"><span class="material-symbols-outlined">favorite</span><span class="badge wishlist-badge" id="wishlist-count">0</span></a>
+      <a href="cart.html" class="header-btn"><span class="material-symbols-outlined">shopping_bag</span><span class="badge cart-badge" id="cart-count">0</span></a>
+    </div>
+  </header>
+  <main class="page-content">
+    <div class="page-header"><h1>Wishlist</h1><p>Your saved favorites</p></div>
+    <div class="product-grid" id="product-grid"></div>
+  </main>
+</div>
+</div>
+<script src="assets/js/i18n.js"></script>
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script><script src="assets/js/cart.js"></script><script src="assets/js/wishlist.js"></script><script src="assets/js/checkout.js"></script><script src="assets/js/app.js"></script>
+<script>
+function renderWish(){
+  const list = Wishlist.getProducts();
+  const el = document.getElementById("product-grid");
+  if(!list.length){el.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><span class="material-symbols-outlined">favorite</span><h3>Wishlist is empty</h3><p>Save pieces you love for later.</p><a href="categories.html" class="btn btn-primary">Explore</a></div>`;return;}
+  el.innerHTML = list.map(p=>App.renderProductCard(p)).join("");
+}
+document.addEventListener("DOMContentLoaded", () => {
+      if (!Auth.isLoggedIn()) {
+        location.href = "login.html?redirect=wishlist.html";
+        return;
+      }
+      renderWish();
+    });
+document.addEventListener("wishlistUpdated",renderWish);
+</script>
+</body></html>

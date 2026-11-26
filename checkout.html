@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — STRUGGLE / STUDIO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="assets/css/shop.css">
+  <link rel="icon" href="assets/images/logo.png">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <img src="assets/images/logo.png" alt="STRUGGLE">
+        <div class="sidebar-brand-text"><span class="brand-name">SFV</span><span class="brand-sub">Studio</span></div>
+      </div>
+      <nav class="nav-section">
+        <a href="index.html" class="nav-link"><span class="material-symbols-outlined">home</span> Home</a>
+        <a href="categories.html" class="nav-link"><span class="material-symbols-outlined">grid_view</span> Categories</a>
+        <a href="cart.html" class="nav-link"><span class="material-symbols-outlined">shopping_bag</span> Cart</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-card"><div class="user-avatar">A</div><div class="user-info"><div class="user-name">Guest</div><div class="user-role">Sign in</div></div></div>
+      </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <div class="main-content">
+      <header class="header">
+        <div class="header-left">
+          <button class="sidebar-toggle" id="sidebar-toggle"><span class="material-symbols-outlined">menu</span></button>
+          <strong style="font-size:16px">Checkout</strong>
+        </div>
+        <div class="header-right">
+          <a href="cart.html" class="header-btn"><span class="material-symbols-outlined">shopping_bag</span><span class="badge cart-badge" id="cart-count">0</span></a>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <div id="checkout-content"><div class="skeleton" style="height:240px;border-radius:16px"></div></div>
+      </main>
+    </div>
+  </div>
+
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/wishlist.js"></script>
+  <script src="assets/js/checkout.js"></script>
+  <script src="assets/js/maps.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+  const CK = { items: [], provinces: [], addresses: [], quote: null, courier: null, coupon: null, couponDiscount: 0, pm: null, map: null, quoteTimer: null, submitting: false };
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    if (!(await Auth.requireLogin())) return;
+    Catalog.onReady(init);
+  });
+
+  async function init() {
+    CK.items = Cart.get();
+    const root = document.getElementById("checkout-content");
+    if (!CK.items.length) {
+      root.innerHTML = `<div class="empty-state"><span class="material-symbols-outlined">shopping_bag</span><h3>Keranjang kosong</h3><p>Tambahkan produk terlebih dahulu.</p><a href="categories.html" class="btn btn-primary">Mulai Belanja</a></div>`;
+      return;
+    }
+    // Sinkronkan keranjang dengan katalog server: buang produk yang sudah tidak ada.
+    const stale = CK.items.filter(i => !getProductById(i.id));
+    if (stale.length) { Cart.save(CK.items.filter(i => getProductById(i.id))); CK.items = Cart.get(); App.toast("Produk yang tidak tersedia dihapus dari keranjang.", "error"); }
+    try { [CK.provinces, CK.addresses] = await Promise.all([Shipping.provinces(), Addresses.list()]); }
+    catch (e) { root.innerHTML = `<div class="notice bad">${esc(e.message)}</div>`; return; }
+    render();
+  }
+
+  const user = () => Auth.currentUser() || {};
+  const val = id => (document.getElementById(id) || {}).value || "";
+
+  function render() {
+    const u = user();
+    const pms = (Catalog.config && Catalog.config.paymentMethods) || [];
+    const groups = [["bank", "Transfer Bank"], ["ewallet", "E-Wallet"], ["qris", "QRIS"], ["cod", "Bayar di Tempat"]];
+    document.getElementById("checkout-content").innerHTML = `
+    <div class="co-layout">
+      <div>
+        <section class="co-card" id="sec-address">
+          <h2><span class="co-step">1</span> Informasi Pelanggan & Alamat Pengiriman</h2>
+          <p class="co-sub">Data diambil dari profil &amp; alamat tersimpan. Anda masih bisa mengubahnya sebelum memesan.</p>
+          <div class="addr-chips" id="addr-chips"></div>
+          <div class="f-grid">
+            <div class="f-row"><label class="form-label" for="f-recipient">Nama penerima *</label><input class="form-input" id="f-recipient" autocomplete="name" value="${esc(u.name)}"></div>
+            <div class="f-row"><label class="form-label" for="f-email">Email *</label><input class="form-input" id="f-email" type="email" autocomplete="email" value="${esc(u.email)}"></div>
+            <div class="f-row"><label class="form-label" for="f-phone">Telepon / WhatsApp *</label><input class="form-input" id="f-phone" type="tel" autocomplete="tel" value="${esc(u.phone || "")}" placeholder="08xxxxxxxxxx"></div>
+            <div class="f-row"><label class="form-label" for="f-province">Provinsi *</label>
+              <select class="form-select" id="f-province"><option value="">Pilih provinsi</option>${CK.provinces.map(p => `<option>${esc(p)}</option>`).join("")}</select></div>
+            <div class="f-row span-2"><label class="form-label" for="f-address">Alamat lengkap * <small>(jalan, nomor, RT/RW, patokan)</small></label><textarea class="form-input" id="f-address" rows="2" autocomplete="street-address"></textarea></div>
+            <div class="f-row"><label class="form-label" for="f-city">Kota / Kabupaten *</label><input class="form-input" id="f-city" placeholder="mis. Kota Bandung"></div>
+            <div class="f-row"><label class="form-label" for="f-district">Kecamatan</label><input class="form-input" id="f-district"></div>
+            <div class="f-row"><label class="form-label" for="f-village">Kelurahan / Desa</label><input class="form-input" id="f-village"></div>
+            <div class="f-row"><label class="form-label" for="f-postal">Kode pos</label><input class="form-input" id="f-postal" inputmode="numeric" maxlength="5"></div>
+            <div class="f-row span-2"><label class="form-label" for="f-notes">Catatan untuk kurir</label><input class="form-input" id="f-notes" maxlength="300" placeholder="mis. titip ke satpam, rumah pagar hijau"></div>
+          </div>
+          <h3 style="font-size:14px;margin:18px 0 0">Tentukan titik lokasi pengiriman</h3>
+          <p class="co-sub" style="margin-bottom:0">Opsional, tetapi membuat pengiriman lebih akurat dan wajib untuk layanan instan (GoSend/GrabExpress).</p>
+          <div id="map-mount"></div>
+          <label class="checkbox-row" style="display:flex;gap:8px;align-items:center;margin-top:14px;font-size:13.5px"><input type="checkbox" id="f-save" ${CK.addresses.length ? "" : "checked"}> Simpan alamat ini ke buku alamat saya</label>
+        </section>
+
+        <section class="co-card" id="sec-shipping">
+          <h2><span class="co-step">2</span> Ekspedisi & Layanan Pengiriman</h2>
+          <p class="co-sub">Pilih ekspedisi setelah provinsi dan kota terisi.</p>
+          <div id="ship-box"><div class="notice">Lengkapi provinsi &amp; kota tujuan untuk melihat opsi pengiriman.</div></div>
+        </section>
+
+        <section class="co-card" id="sec-payment">
+          <h2><span class="co-step">3</span> Metode Pembayaran</h2>
+          <p class="co-sub">Pembayaran diverifikasi manual oleh admin — pesanan <b>tidak</b> dianggap lunas sebelum dikonfirmasi.</p>
+          ${pms.length ? groups.map(([g, label]) => { const list = pms.filter(p => p.grp === g); return list.length ? `<div class="opt-group">${label}</div><div class="opt-list">${list.map(p => `
+            <label class="opt-card" data-pm="${esc(p.code)}"><input type="radio" name="pm" value="${esc(p.code)}"><div class="opt-main"><div class="opt-title"><span>${esc(p.name)}${p.is_sample ? '<span class="tag-sample">contoh</span>' : ""}</span></div></div></label>`).join("")}</div>` : ""; }).join("") : `<div class="notice warn">Belum ada metode pembayaran aktif. Hubungi admin toko.</div>`}
+          <div id="pay-detail"></div>
+        </section>
+      </div>
+
+      <aside class="co-card sum-card">
+        <h2>Ringkasan Pesanan</h2>
+        <div class="sum-items" id="sum-items"></div>
+        <div class="coupon-row"><input class="form-input" id="coupon" placeholder="Kode kupon / voucher"><button class="btn btn-secondary" id="btn-coupon" type="button">Pakai</button></div>
+        <div id="coupon-msg"></div>
+        <div id="sum-lines"></div>
+        <div id="status-line" class="notice" style="margin-top:12px">Status pembayaran: <b>Belum Dibayar</b> — akan dibuat setelah pesanan dikonfirmasi.</div>
+        <button class="btn btn-primary btn-lg w-full" id="btn-order" type="button">Konfirmasi Pesanan</button>
+        <p style="font-size:12px;color:var(--text-muted);margin:10px 0 0">Dengan menekan tombol ini Anda membuat pesanan. Harga, ongkir, dan diskon dihitung ulang oleh server.</p>
+      </aside>
+    </div>`;
+
+    // chips alamat tersimpan
+    renderChips();
+    const def = CK.addresses.find(a => a.isDefault) || CK.addresses[0];
+    if (def) applyAddress(def);
+
+    CK.map = MapPicker.mount(document.getElementById("map-mount"), {
+      lat: def && def.lat, lng: def && def.lng,
+      onChange: info => {
+        if (info.formattedAddress !== undefined) fillFromMap(info);
+        scheduleQuote();
+      },
+    });
+    ["f-province", "f-city"].forEach(id => document.getElementById(id).addEventListener("change", scheduleQuote));
+    document.getElementById("f-city").addEventListener("input", scheduleQuote);
+    document.querySelectorAll("input[name=pm]").forEach(r => r.addEventListener("change", () => selectPayment(r.value)));
+    document.getElementById("btn-coupon").onclick = applyCoupon;
+    document.getElementById("btn-order").onclick = submitOrder;
+    renderSummary();
+    scheduleQuote(true);
+  }
+
+  function renderChips() {
+    const box = document.getElementById("addr-chips");
+    if (!CK.addresses.length) { box.style.display = "none"; return; }
+    box.innerHTML = CK.addresses.map(a => `<button type="button" class="addr-chip" data-id="${a.id}"><b>${esc(a.label || "Alamat")}${a.isDefault ? " · Utama" : ""}</b><span>${esc(a.recipient)} — ${esc(a.address)}</span></button>`).join("")
+      + `<button type="button" class="addr-chip" data-id="new"><b>+ Alamat baru</b><span>Kosongkan formulir</span></button>`;
+    box.querySelectorAll(".addr-chip").forEach(b => b.onclick = () => {
+      if (b.dataset.id === "new") { applyAddress({ recipient: user().name, phone: user().phone || "", address: "", province: "", city: "", district: "", village: "", postal: "", notes: "", lat: null, lng: null }); CK.addrId = null; }
+      else applyAddress(CK.addresses.find(a => a.id == b.dataset.id));
+      document.getElementById("f-save").checked = b.dataset.id === "new";
+      document.getElementById("f-save").disabled = b.dataset.id !== "new";
+    });
+  }
+  function applyAddress(a) {
+    if (!a) return;
+    CK.addrId = a.id || null;
+    const set = (id, v) => document.getElementById(id).value = v || "";
+    set("f-recipient", a.recipient); set("f-phone", a.phone); set("f-address", a.address); set("f-province", a.province);
+    set("f-city", a.city); set("f-district", a.district); set("f-village", a.village); set("f-postal", a.postal); set("f-notes", a.notes);
+    CK.placeId = a.placeId || ""; CK.formatted = a.formattedAddress || "";
+    document.querySelectorAll(".addr-chip").forEach(b => b.classList.toggle("active", b.dataset.id == a.id));
+    if (CK.map) CK.map.setPosition(a.lat, a.lng, { reverse: false });
+    scheduleQuote();
+  }
+  function fillFromMap(info) {
+    CK.placeId = info.placeId || ""; CK.formatted = info.formattedAddress || "";
+    const prov = MapPicker.canonicalProvince(info.province, CK.provinces);
+    if (prov) document.getElementById("f-province").value = prov;
+    const set = (id, v) => { if (v) document.getElementById(id).value = v; };
+    set("f-city", info.city); set("f-district", info.district); set("f-village", info.village); set("f-postal", info.postal);
+    if (!val("f-address").trim() && info.street) document.getElementById("f-address").value = info.street;
+  }
+
+  /* ------------------------------------------------------------ ongkir */
+  function scheduleQuote(now) { clearTimeout(CK.quoteTimer); CK.quoteTimer = setTimeout(fetchQuote, now ? 0 : 500); }
+  async function fetchQuote() {
+    const province = val("f-province"), city = val("f-city").trim();
+    const box = document.getElementById("ship-box");
+    if (!province || !city) { CK.quote = null; CK.courier = null; box.innerHTML = `<div class="notice">Lengkapi provinsi &amp; kota tujuan untuk melihat opsi pengiriman.</div>`; renderSummary(); return; }
+    box.innerHTML = `<div class="skeleton" style="height:90px;border-radius:12px"></div>`;
+    const pos = CK.map ? CK.map.getPosition() : {};
+    try {
+      CK.quote = await Shipping.quote(CK.items.map(i => ({ id: i.id, qty: i.qty })), { province, city, lat: pos.lat, lng: pos.lng });
+    } catch (e) { box.innerHTML = `<div class="notice bad">${esc(e.message)}</div>`; return; }
+    if (CK.courier && !CK.quote.options.some(o => o.courier === CK.courier.courier && o.service === CK.courier.service && o.available)) CK.courier = null;
+    renderShipping();
+  }
+  function renderShipping() {
+    const q = CK.quote, box = document.getElementById("ship-box");
+    const byCourier = {};
+    q.options.forEach(o => (byCourier[o.courierName] = byCourier[o.courierName] || []).push(o));
+    box.innerHTML = `
+      <div class="notice warn"><b>Estimasi / simulasi.</b> Ongkir dihitung dari konfigurasi toko berdasarkan zona (${esc(q.zone_label)}, asal ${esc(q.origin.city)}), berat tertagih ${q.billable_kg} kg${q.distance_km != null ? ", jarak ± " + q.distance_km + " km" : ""}. Biaya final mengikuti pesanan ini.</div>
+      ${Object.entries(byCourier).map(([name, list]) => `<div class="opt-group">${esc(name)}</div><div class="opt-list">${list.map(o => {
+        const on = CK.courier && CK.courier.courier === o.courier && CK.courier.service === o.service;
+        return `<label class="opt-card ${on ? "active" : ""} ${o.available ? "" : "disabled"}"><input type="radio" name="ship" ${o.available ? "" : "disabled"} ${on ? "checked" : ""} data-c="${esc(o.courier)}" data-s="${esc(o.service)}">
+          <div class="opt-main"><div class="opt-title"><span>${esc(o.serviceName)} <small style="font-weight:400;color:var(--text-muted)">· ${o.type === "express" ? "Express" : o.type === "instant" ? "Instan" : "Reguler"}</small></span><span>${o.available ? formatPrice(o.fee) : "—"}</span></div>
+          <div class="opt-meta">${o.available ? "Estimasi tiba " + esc(o.etd) + " · " : ""}${esc(o.available ? o.description : o.reason)}</div></div></label>`; }).join("")}</div>`).join("")}`;
+    box.querySelectorAll("input[name=ship]").forEach(r => r.addEventListener("change", () => {
+      CK.courier = q.options.find(o => o.courier === r.dataset.c && o.service === r.dataset.s);
+      box.querySelectorAll(".opt-card").forEach(c => c.classList.toggle("active", c.contains(r) && r.checked));
+      CK.coupon && recheckCoupon(); renderSummary();
+    }));
+    renderSummary();
+  }
+
+  /* ------------------------------------------------------------ pembayaran */
+  function selectPayment(code) {
+    CK.pm = ((Catalog.config.paymentMethods) || []).find(p => p.code === code);
+    document.querySelectorAll("[data-pm]").forEach(c => c.classList.toggle("active", c.dataset.pm === code));
+    const p = CK.pm, box = document.getElementById("pay-detail");
+    let html = "";
+    if (p.grp === "bank") html = `<div>Transfer ke rekening <b>${esc(p.name.replace("Transfer Bank ", ""))}</b></div><div class="acc-no">${esc(p.account_number || "-")}</div><div>a.n. ${esc(p.account_name || "-")}</div>`;
+    else if (p.grp === "ewallet") html = `<div>Kirim ke akun <b>${esc(p.name)}</b></div><div class="acc-no">${esc(p.account_number || "-")}</div><div>a.n. ${esc(p.account_name || "-")}</div>`;
+    else if (p.grp === "qris") html = p.qr_image ? `<div>Pindai kode QRIS berikut:</div><img class="qris" src="${esc(p.qr_image)}" alt="Kode QRIS">` : `<div class="notice warn" style="margin:0">Kode QRIS belum diunggah admin. Pesanan tetap bisa dibuat; instruksi dan kode QR akan diberikan di halaman pesanan.</div>`;
+    else html = `<div><b>Cash on Delivery:</b> bayar tunai ke kurir saat pesanan diterima.</div>`;
+    box.innerHTML = `<div class="pay-detail">${html}${p.is_sample && p.grp !== "cod" ? `<div class="notice warn" style="margin:10px 0 0">Data ini masih <b>contoh</b> (belum diatur admin). Jangan transfer sebelum admin mengonfirmasi data pembayaran asli.</div>` : ""}<pre>${esc(p.instructions || "")}</pre></div>`;
+    renderSummary();
+  }
+
+  /* ------------------------------------------------------------ kupon */
+  const subtotal = () => CK.items.reduce((s, i) => s + i.price * i.qty, 0);
+  async function applyCoupon() {
+    const code = val("coupon").trim();
+    const msg = document.getElementById("coupon-msg");
+    if (!code) { CK.coupon = null; CK.couponDiscount = 0; msg.innerHTML = ""; return renderSummary(); }
+    try {
+      const r = await Orders.checkCoupon(code, subtotal(), CK.courier ? CK.courier.fee : 0);
+      CK.coupon = code.toUpperCase(); CK.couponDiscount = r.discount;
+      msg.innerHTML = `<div class="notice ok" style="margin-top:0">Kupon <b>${esc(CK.coupon)}</b> dipakai: −${formatPrice(r.discount)}</div>`;
+    } catch (e) { CK.coupon = null; CK.couponDiscount = 0; msg.innerHTML = `<div class="notice bad" style="margin-top:0">${esc(e.message)}</div>`; }
+    renderSummary();
+  }
+  async function recheckCoupon() { if (CK.coupon) { document.getElementById("coupon").value = CK.coupon; await applyCoupon(); } }
+
+  function renderSummary() {
+    document.getElementById("sum-items").innerHTML = CK.items.map(i => `<div class="sum-item"><img src="${esc(i.image)}" alt=""><div class="grow"><div class="nm">${esc(i.name)}</div><div class="mt">${esc([i.color, i.size, i.sleeve].filter(Boolean).join(" · "))} · ×${i.qty}</div></div><b>${formatPrice(i.price * i.qty)}</b></div>`).join("");
+    const sub = subtotal(), ship = CK.courier ? CK.courier.fee : null, disc = CK.couponDiscount || 0;
+    const total = sub + (ship || 0) - disc;
+    document.getElementById("sum-lines").innerHTML = `
+      <div class="sum-line"><span>Total harga produk</span><span>${formatPrice(sub)}</span></div>
+      <div class="sum-line"><span>Diskon / voucher</span><span>${disc ? "−" + formatPrice(disc) : "—"}</span></div>
+      <div class="sum-line"><span>Ongkir ${CK.courier ? "(" + esc(CK.courier.courierName) + " " + esc(CK.courier.serviceName) + ")" : ""}</span><span>${ship != null ? formatPrice(ship) : "Pilih ekspedisi"}</span></div>
+      <div class="sum-line total"><span>Total pembayaran</span><span>${formatPrice(total)}</span></div>`;
+  }
+
+  /* ------------------------------------------------------------ pesan */
+  async function submitOrder() {
+    if (CK.submitting) return;
+    const need = (id, label) => { if (!val(id).trim()) { document.getElementById(id).focus(); throw new Error(label + " wajib diisi."); } };
+    try {
+      need("f-recipient", "Nama penerima"); need("f-phone", "Nomor telepon"); need("f-address", "Alamat lengkap"); need("f-province", "Provinsi"); need("f-city", "Kota/Kabupaten");
+      if (!CK.courier) throw new Error("Pilih ekspedisi dan layanan pengiriman.");
+      if (!CK.pm) throw new Error("Pilih metode pembayaran.");
+    } catch (e) { return App.toast(e.message, "error"); }
+    const pos = CK.map.getPosition();
+    const btn = document.getElementById("btn-order");
+    CK.submitting = true; btn.disabled = true; btn.textContent = "Memproses…";
+    try {
+      const order = await Orders.create({
+        items: CK.items.map(i => ({ id: i.id, qty: i.qty, size: i.size, color: i.color, sleeve: i.sleeve || "" })),
+        customerEmail: val("f-email"),
+        address: { label: "Alamat", recipient: val("f-recipient"), phone: val("f-phone"), address: val("f-address"), province: val("f-province"), city: val("f-city"), district: val("f-district"), village: val("f-village"), postal: val("f-postal"), notes: val("f-notes"), lat: pos.lat, lng: pos.lng, placeId: CK.placeId || "", formattedAddress: CK.formatted || "" },
+        saveAddress: document.getElementById("f-save").checked && !document.getElementById("f-save").disabled,
+        courier: CK.courier.courier, service: CK.courier.service, paymentMethod: CK.pm.code, couponCode: CK.coupon || "",
+      });
+      Cart.clear();
+      location.href = "order.html?id=" + encodeURIComponent(order.id) + "&new=1";
+    } catch (e) {
+      CK.submitting = false; btn.disabled = false; btn.textContent = "Konfirmasi Pesanan";
+      App.toast(e.message, "error");
+      if (e.code === "out_of_stock" || e.code === "product_unavailable") await Catalog.init();
+    }
+  }
+  </script>
+</body>
+</html>

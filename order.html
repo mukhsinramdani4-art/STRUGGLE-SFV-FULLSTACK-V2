@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Pesanan — STRUGGLE / STUDIO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="assets/css/shop.css">
+  <link rel="icon" href="assets/images/logo.png">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <img src="assets/images/logo.png" alt="STRUGGLE">
+        <div class="sidebar-brand-text"><span class="brand-name">SFV</span><span class="brand-sub">Studio</span></div>
+      </div>
+      <nav class="nav-section">
+        <a href="index.html" class="nav-link"><span class="material-symbols-outlined">home</span> Home</a>
+        <a href="categories.html" class="nav-link"><span class="material-symbols-outlined">grid_view</span> Categories</a>
+        <a href="cart.html" class="nav-link"><span class="material-symbols-outlined">shopping_bag</span> Cart</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-card"><div class="user-avatar">A</div><div class="user-info"><div class="user-name">Guest</div><div class="user-role">Sign in</div></div></div>
+      </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <div class="main-content">
+      <header class="header">
+        <div class="header-left">
+          <button class="sidebar-toggle" id="sidebar-toggle"><span class="material-symbols-outlined">menu</span></button>
+          <strong style="font-size:16px">Detail Pesanan</strong>
+        </div>
+        <div class="header-right">
+          <a href="cart.html" class="header-btn"><span class="material-symbols-outlined">shopping_bag</span><span class="badge cart-badge" id="cart-count">0</span></a>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <a href="my-orders.html" style="font-size:13px;color:var(--text-muted)">← Riwayat pesanan</a>
+        <div id="order-root" style="margin-top:12px"><div class="skeleton" style="height:240px;border-radius:16px"></div></div>
+      </main>
+    </div>
+  </div>
+
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/wishlist.js"></script>
+  <script src="assets/js/checkout.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+  const oid = new URLSearchParams(location.search).get("id");
+  let ORDER = null;
+  document.addEventListener("DOMContentLoaded", async () => { if (await Auth.requireLogin()) load(); });
+
+  async function load() {
+    const root = document.getElementById("order-root");
+    if (!oid) { root.innerHTML = `<div class="notice bad">ID pesanan tidak ditemukan.</div>`; return; }
+    try { ORDER = await Orders.get(oid); } catch (e) { root.innerHTML = `<div class="notice bad">${e.status === 404 ? "Pesanan tidak ditemukan." : esc(e.message)}</div>`; return; }
+    render();
+  }
+
+  function render() {
+    const o = ORDER, p = o.payment || {}, info = o.payment_info || {};
+    const cancelled = o.status === "Dibatalkan";
+    const isNew = new URLSearchParams(location.search).get("new") === "1";
+    const needPay = !cancelled && o.payment_method !== "cod" && ["Belum Dibayar", "Gagal"].includes(o.payment_status);
+    const waiting = !cancelled && o.payment_status === "Menunggu Verifikasi";
+    const hasCoord = o.shipping_lat != null && o.shipping_lng != null;
+
+    let payBlock = "";
+    if (cancelled) payBlock = `<div class="notice bad">Pesanan dibatalkan.</div>`;
+    else if (o.payment_status === "Dibayar") payBlock = `<div class="notice ok">Pembayaran sudah <b>diverifikasi admin</b> pada ${fmtDateTime(p.verified_at)}.</div>`;
+    else if (o.payment_status === "Dikembalikan") payBlock = `<div class="notice info">Pembayaran telah dikembalikan (refund).</div>`;
+    else if (o.payment_method === "cod") payBlock = `<div class="notice info"><b>Bayar di tempat (COD).</b> Siapkan uang tunai <b>${formatPrice(o.total)}</b> untuk dibayar kepada kurir saat pesanan diterima. Status akan berubah menjadi Dibayar setelah dikonfirmasi admin.</div>`;
+    else {
+      let acc = "";
+      if (info.grp === "qris") acc = info.qr_image ? `<img class="qris" src="${esc(info.qr_image)}" alt="QRIS">` : `<div class="notice warn" style="margin:0">Kode QRIS belum diunggah admin. Hubungi admin untuk mendapatkan kode pembayaran.</div>`;
+      else acc = `<div>${esc(info.name || o.payment_method_label)}</div><div class="acc-no">${esc(info.account_number || "-")}</div><div>a.n. ${esc(info.account_name || "-")}</div>`;
+      payBlock = `
+        ${o.payment_status === "Gagal" ? `<div class="notice bad"><b>Pembayaran ditolak/gagal.</b> ${esc(p.reject_reason || "")} Silakan unggah bukti yang benar.</div>` : ""}
+        ${waiting ? `<div class="notice info"><b>Bukti pembayaran diterima</b> (${fmtDateTime(p.proof_uploaded_at)}). Menunggu verifikasi admin — status belum Dibayar.</div>` : `<div class="notice warn"><b>Belum dibayar.</b> Bayar sebelum <b>${fmtDateTime(o.payment_due_at)}</b>. Status baru berubah setelah admin memverifikasi.</div>`}
+        <div class="pay-detail"><div>Total yang harus dibayar</div><div class="acc-no">${formatPrice(o.total)}</div><hr style="border:0;border-top:1px solid var(--border);margin:10px 0">${acc}
+          ${info.is_sample ? `<div class="notice warn" style="margin:10px 0 0">Data pembayaran ini masih <b>contoh</b>. Jangan transfer sebelum admin mengonfirmasi data asli.</div>` : ""}
+          <pre>${esc(info.instructions || "")}</pre></div>
+        ${p.has_proof == 1 ? `<p style="font-size:13px;margin:10px 0 0"><a href="api/payments.php?action=proof&order_id=${encodeURIComponent(o.id)}" target="_blank" rel="noopener">Lihat bukti yang Anda unggah ↗</a></p>` : ""}
+        <form id="proof-form" style="margin-top:14px">
+          <label class="form-label">${p.has_proof == 1 ? "Unggah ulang bukti pembayaran" : "Unggah bukti pembayaran"} (JPG/PNG/WEBP/PDF, maks 4 MB)</label>
+          <input class="form-input" type="file" id="proof-file" accept="image/*,application/pdf" required>
+          <input class="form-input" id="proof-note" style="margin-top:8px" placeholder="Catatan (opsional): nama pengirim, jam transfer" maxlength="300">
+          <button class="btn btn-primary" type="submit" id="btn-proof" style="margin-top:10px">Kirim Bukti Pembayaran</button>
+        </form>`;
+    }
+
+    const ship = (o.events || []).filter(e => e.kind === "shipping");
+    const canCancel = o.status === "Pending" && o.payment_status !== "Dibayar";
+    document.getElementById("order-root").innerHTML = `
+      ${isNew ? `<div class="notice ok" style="margin-top:0"><b>Pesanan berhasil dibuat.</b> ${needPay ? "Selesaikan pembayaran di bawah ini." : ""} Pesanan Anda sudah masuk ke dashboard admin.</div>` : ""}
+      <div class="co-card">
+        <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
+          <div><h2 style="margin:0">Pesanan ${esc(o.id)}</h2><div class="co-sub" style="margin:2px 0 0">Dibuat ${fmtDateTime(o.created_at)}</div></div>
+          ${canCancel ? `<button class="btn btn-secondary btn-sm" id="btn-cancel" style="color:var(--error)">Batalkan Pesanan</button>` : ""}
+        </div>
+        <div class="status-row" style="margin-top:14px">
+          <div class="status-box"><small>Status pesanan</small>${statusPill(o.status)}</div>
+          <div class="status-box"><small>Status pembayaran</small>${statusPill(o.payment_status)}</div>
+          <div class="status-box"><small>Status pengiriman</small>${statusPill(o.shipping_status)}</div>
+        </div>
+      </div>
+
+      <div class="co-layout">
+        <div>
+          <section class="co-card"><h2>Pembayaran</h2><p class="co-sub">${esc(o.payment_method_label || o.payment_method)}</p>${payBlock}</section>
+
+          <section class="co-card"><h2>Pengiriman</h2>
+            <div style="font-size:14px;line-height:1.7">
+              <b>${esc(o.courier_name || "-")} — ${esc(o.service_name || "-")}</b><br>
+              Estimasi tiba: ${esc(o.shipping_etd || "-")} <span style="color:var(--text-muted)">(estimasi/simulasi)</span><br>
+              Nomor resi: ${o.tracking_number ? `<b style="user-select:all">${esc(o.tracking_number)}</b>` : `<span style="color:var(--text-muted)">belum tersedia — akan diisi admin saat dikirim</span>`}
+            </div>
+            ${ship.length ? `<h3 style="font-size:14px;margin:16px 0 8px">Riwayat pengiriman</h3><ul class="timeline">${ship.slice().reverse().map(e => `<li><b>${esc(e.to_status || "")}</b>${e.note ? " — " + esc(e.note) : ""}<small>${fmtDateTime(e.created_at)}</small></li>`).join("")}</ul>` : ""}
+          </section>
+
+          <section class="co-card"><h2>Alamat Tujuan</h2>
+            <div style="font-size:14px;line-height:1.7"><b>${esc(o.recipient_name || o.customer_name)}</b> · ${esc(o.customer_phone || "")}<br>${esc(o.shipping_address || "")}<br>
+            ${esc([o.shipping_village, o.shipping_district, o.shipping_city, o.shipping_province, o.shipping_postal].filter(Boolean).join(", "))}
+            ${o.shipping_notes ? `<br><span style="color:var(--text-muted)">Catatan kurir: ${esc(o.shipping_notes)}</span>` : ""}
+            ${hasCoord ? `<br>📍 ${Number(o.shipping_lat).toFixed(6)}, ${Number(o.shipping_lng).toFixed(6)} — <a href="https://www.google.com/maps?q=${o.shipping_lat},${o.shipping_lng}" target="_blank" rel="noopener">Lihat di Google Maps ↗</a>` : ""}</div>
+          </section>
+
+          <section class="co-card"><h2>Riwayat Status</h2>
+            <ul class="timeline">${(o.events || []).slice().reverse().map(e => `<li><b>${{ order: "Pesanan", payment: "Pembayaran", shipping: "Pengiriman" }[e.kind] || ""}:</b> ${esc(e.to_status || "")}${e.note ? " — " + esc(e.note) : ""}<small>${fmtDateTime(e.created_at)}</small></li>`).join("")}</ul>
+          </section>
+        </div>
+
+        <aside class="co-card sum-card"><h2>Rincian</h2>
+          <div class="sum-items" style="max-height:none">${(o.items || []).map(i => `<div class="sum-item"><img src="${esc(i.image || "assets/images/logo.png")}" alt=""><div class="grow"><div class="nm">${esc(i.product_name)}</div><div class="mt">${esc([i.color, i.size, i.sleeve].filter(Boolean).join(" · "))} · ×${i.qty}</div></div><b>${formatPrice(i.price * i.qty)}</b></div>`).join("")}</div>
+          <div class="sum-line"><span>Total harga produk</span><span>${formatPrice(o.subtotal)}</span></div>
+          <div class="sum-line"><span>Diskon${o.coupon_code ? " (" + esc(o.coupon_code) + ")" : ""}</span><span>${o.discount ? "−" + formatPrice(o.discount) : "—"}</span></div>
+          <div class="sum-line"><span>Ongkir (estimasi)</span><span>${formatPrice(o.shipping_fee)}</span></div>
+          <div class="sum-line total"><span>Total</span><span>${formatPrice(o.total)}</span></div>
+        </aside>
+      </div>`;
+
+    const f = document.getElementById("proof-form");
+    if (f) f.addEventListener("submit", async e => {
+      e.preventDefault();
+      const file = document.getElementById("proof-file").files[0];
+      if (!file) return;
+      const b = document.getElementById("btn-proof"); b.disabled = true; b.textContent = "Mengunggah…";
+      try { ORDER = await Orders.uploadProof(o.id, file, document.getElementById("proof-note").value); App.toast("Bukti diterima. Menunggu verifikasi admin."); render(); }
+      catch (err) { App.toast(err.message, "error"); b.disabled = false; b.textContent = "Kirim Bukti Pembayaran"; }
+    });
+    const c = document.getElementById("btn-cancel");
+    if (c) c.onclick = async () => { if (!confirm("Batalkan pesanan ini?")) return; try { ORDER = await Orders.cancel(o.id); App.toast("Pesanan dibatalkan."); render(); } catch (err) { App.toast(err.message, "error"); } };
+  }
+  </script>
+</body>
+</html>

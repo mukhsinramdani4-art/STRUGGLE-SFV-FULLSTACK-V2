@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alamat — STRUGGLE / STUDIO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/shop.css"><link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="icon" href="assets/images/logo.png">
+</head>
+<body>
+<div class="app-layout">
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><img src="assets/images/logo.png" alt="STRUGGLE"><div class="sidebar-brand-text"><span class="brand-name">SFV</span><span class="brand-sub">Studio</span></div></div>
+  <nav class="nav-section">
+    <a href="index.html" class="nav-link"><span class="material-symbols-outlined">home</span> Home</a>
+    <a href="addresses.html" class="nav-link active"><span class="material-symbols-outlined">location_on</span> Addresses</a>
+    <a href="account-settings.html" class="nav-link"><span class="material-symbols-outlined">settings</span> Settings</a>
+  </nav>
+  <div class="sidebar-footer"><div class="user-card"><div class="user-avatar">A</div><div class="user-info"><div class="user-name">Guest</div><div class="user-role">Sign in</div></div></div></div>
+</aside>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="main-content">
+  <header class="header">
+    <div class="header-left"><button class="sidebar-toggle" id="sidebar-toggle"><span class="material-symbols-outlined">menu</span></button></div>
+    <div class="header-right"><a href="cart.html" class="header-btn"><span class="material-symbols-outlined">shopping_bag</span><span class="badge cart-badge" id="cart-count">0</span></a></div>
+  </header>
+  <main class="page-content">
+    <div class="page-header flex justify-between items-center">
+      <div><h1>Alamat Pengiriman</h1><p>Kelola alamat dan titik lokasi pengiriman Anda</p></div>
+      <button class="btn btn-primary btn-sm" onclick="showForm()">+ Tambah Alamat</button>
+    </div>
+    <div id="addr-list"><div class="skeleton" style="height:100px;border-radius:14px"></div></div>
+    <section class="co-card" id="addr-form" style="display:none;margin-top:18px">
+      <h2 id="form-title">Alamat Baru</h2>
+      <div class="f-grid" style="margin-top:12px">
+        <div class="f-row"><label class="form-label">Label</label><input class="form-input" id="a-label" placeholder="Rumah / Kantor / Kos"></div>
+        <div class="f-row"><label class="form-label">Nama penerima *</label><input class="form-input" id="a-recipient"></div>
+        <div class="f-row"><label class="form-label">Telepon / WhatsApp *</label><input class="form-input" id="a-phone" type="tel"></div>
+        <div class="f-row"><label class="form-label">Provinsi *</label><select class="form-select" id="a-province"></select></div>
+        <div class="f-row span-2"><label class="form-label">Alamat lengkap *</label><textarea class="form-input" id="a-address" rows="2"></textarea></div>
+        <div class="f-row"><label class="form-label">Kota / Kabupaten *</label><input class="form-input" id="a-city"></div>
+        <div class="f-row"><label class="form-label">Kecamatan</label><input class="form-input" id="a-district"></div>
+        <div class="f-row"><label class="form-label">Kelurahan / Desa</label><input class="form-input" id="a-village"></div>
+        <div class="f-row"><label class="form-label">Kode pos</label><input class="form-input" id="a-postal" inputmode="numeric" maxlength="5"></div>
+        <div class="f-row span-2"><label class="form-label">Catatan untuk kurir</label><input class="form-input" id="a-notes" maxlength="300"></div>
+      </div>
+      <div id="map-mount"></div>
+      <div class="flex gap-2" style="margin-top:16px"><button class="btn btn-primary" onclick="saveAddr()">Simpan Alamat</button><button class="btn btn-secondary" onclick="hideForm()">Batal</button></div>
+    </section>
+  </main>
+</div>
+</div>
+
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/wishlist.js"></script>
+  <script src="assets/js/checkout.js"></script>
+  <script src="assets/js/maps.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+  let ADDRS = [], PROVS = [], EDIT = null, MAP = null, GEO = {};
+  const v = id => document.getElementById(id).value.trim();
+  const setv = (id, x) => document.getElementById(id).value = x || "";
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    if (!(await Auth.requireLogin())) return;
+    Catalog.onReady(async () => {
+      try { [PROVS, ADDRS] = await Promise.all([Shipping.provinces(), Addresses.list()]); }
+      catch (e) { document.getElementById("addr-list").innerHTML = `<div class="notice bad">${esc(e.message)}</div>`; return; }
+      document.getElementById("a-province").innerHTML = `<option value="">Pilih provinsi</option>` + PROVS.map(p => `<option>${esc(p)}</option>`).join("");
+      renderList();
+    });
+  });
+
+  function renderList() {
+    document.getElementById("addr-list").innerHTML = ADDRS.length ? ADDRS.map(a => `
+      <div class="addr-card"><div style="font-size:14px;line-height:1.65;min-width:0">
+        <b>${esc(a.label || "Alamat")}</b> ${a.isDefault ? '<span class="pill pill-info">Utama</span>' : ""}<br>
+        ${esc(a.recipient)} · ${esc(a.phone)}<br>${esc(a.address)}<br>${esc([a.village, a.district, a.city, a.province, a.postal].filter(Boolean).join(", "))}
+        ${a.lat != null ? `<br><small>📍 ${a.lat.toFixed(6)}, ${a.lng.toFixed(6)} · <a href="https://www.google.com/maps?q=${a.lat},${a.lng}" target="_blank" rel="noopener">Lihat peta</a></small>` : `<br><small style="color:var(--text-muted)">Titik peta belum ditentukan</small>`}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start">
+          ${a.isDefault ? "" : `<button class="btn btn-secondary btn-sm" onclick="makeDefault(${a.id})">Jadikan utama</button>`}
+          <button class="btn btn-secondary btn-sm" onclick="showForm(${a.id})">Ubah</button>
+          <button class="btn btn-secondary btn-sm" style="color:var(--error)" onclick="delAddr(${a.id})">Hapus</button></div></div>`).join("")
+      : `<div class="empty-state"><span class="material-symbols-outlined">location_on</span><h3>Belum ada alamat</h3><p>Tambahkan alamat untuk mempercepat checkout.</p></div>`;
+  }
+
+  function showForm(id) {
+    EDIT = id || null;
+    const a = ADDRS.find(x => x.id === id) || {};
+    document.getElementById("form-title").textContent = id ? "Ubah Alamat" : "Alamat Baru";
+    setv("a-label", a.label); setv("a-recipient", a.recipient || (Auth.currentUser() || {}).name); setv("a-phone", a.phone || (Auth.currentUser() || {}).phone);
+    setv("a-province", a.province); setv("a-address", a.address); setv("a-city", a.city); setv("a-district", a.district); setv("a-village", a.village); setv("a-postal", a.postal); setv("a-notes", a.notes);
+    GEO = { placeId: a.placeId || "", formattedAddress: a.formattedAddress || "" };
+    const f = document.getElementById("addr-form"); f.style.display = "";
+    document.getElementById("map-mount").innerHTML = "";
+    MAP = MapPicker.mount(document.getElementById("map-mount"), { lat: a.lat, lng: a.lng, onChange: info => {
+      if (info.formattedAddress === undefined) return;
+      GEO = { placeId: info.placeId || "", formattedAddress: info.formattedAddress || "" };
+      const prov = MapPicker.canonicalProvince(info.province, PROVS); if (prov) setv("a-province", prov);
+      if (info.city) setv("a-city", info.city); if (info.district) setv("a-district", info.district);
+      if (info.village) setv("a-village", info.village); if (info.postal) setv("a-postal", info.postal);
+      if (!v("a-address") && info.street) setv("a-address", info.street);
+    }});
+    f.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  function hideForm() { document.getElementById("addr-form").style.display = "none"; }
+
+  async function saveAddr() {
+    const pos = MAP.getPosition();
+    const payload = { label: v("a-label") || "Alamat", recipient: v("a-recipient"), phone: v("a-phone"), address: v("a-address"), province: v("a-province"), city: v("a-city"),
+      district: v("a-district"), village: v("a-village"), postal: v("a-postal"), notes: v("a-notes"), lat: pos.lat, lng: pos.lng, placeId: GEO.placeId, formattedAddress: GEO.formattedAddress };
+    try { ADDRS = EDIT ? await Addresses.update(EDIT, payload) : await Addresses.add(payload); renderList(); hideForm(); App.toast("Alamat disimpan."); }
+    catch (e) { App.toast(e.message, "error"); }
+  }
+  async function makeDefault(id) { try { ADDRS = await Addresses.setDefault(id); renderList(); } catch (e) { App.toast(e.message, "error"); } }
+  async function delAddr(id) { if (!confirm("Hapus alamat ini?")) return; try { ADDRS = await Addresses.remove(id); renderList(); } catch (e) { App.toast(e.message, "error"); } }
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+# Blokir akses langsung ke folder data/ dari browser (Apache).
+# Folder ini menyimpan database SQLite (struggle.sqlite) dan file upload —
+# TIDAK boleh bisa diakses/diunduh langsung lewat URL demi keamanan.
+
+# Apache 2.4+
+<IfModule mod_authz_core.c>
+  Require all denied
+</IfModule>
+# Apache 2.2 (fallback)
+<IfModule !mod_authz_core.c>
+  Order deny,allow
+  Deny from all
+</IfModule>

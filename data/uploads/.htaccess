@@ -1,0 +1,11 @@
+# Folder ini (data/uploads) menyimpan gambar produk yang diunggah admin dan
+# HARUS bisa diakses publik agar gambar tampil di toko. Override aturan "deny"
+# dari data/.htaccess di folder induk.
+
+<IfModule mod_authz_core.c>
+  Require all granted
+</IfModule>
+<IfModule !mod_authz_core.c>
+  Order allow,deny
+  Allow from all
+</IfModule>
